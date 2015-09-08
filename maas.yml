@@ -1,0 +1,66 @@
+#!/usr/bin/env ansible-playbook
+# vim:ft=ansible:
+- name: Configure MaaS Server
+  hosts: maashost
+  vars:
+    maas_username: maas
+    maas_password: 123test
+    maas_email: greg@tacodata.com
+    maas_hostonly_ip: 192.168.58.42
+    maas_cluster_ip: 10.100.200.1
+    maas_cluster_mask: 255.255.255.0
+    ansible_dir: /var/ansible
+    ansible_state_dir: "{{ ansible_dir }}/state"
+    maas_startup_state: "{{ ansible_state_dir }}/maas-region-admin"
+  tasks:
+    - name: set editing mode to vi for this user
+      template: src=templates/inputrc.j2 dest=~/.inputrc
+
+    - name: set editing mode to vi for the root user
+      template: src=templates/inputrc.j2 dest=~/.inputrc
+      sudo: True
+
+    - name: set interfaces
+      sudo: True
+      template: src=templates/interfaces.j2 dest=/etc/network/interfaces mode="u=rw,g=r,o=r"
+
+    - name: ifup eth2 network
+      sudo: True
+      command: /sbin/ifup eth2 creates=/run/network/ifup.eth2
+
+    - name: Update repository
+      sudo: True
+      apt_repository: repo='ppa:maas-maintainers/stable'
+
+    - name: Upgrade installation
+      sudo: True
+      apt: upgrade=dist
+
+    - name: Install MaaS
+      sudo: True
+      apt: name=maas force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+    - name: Install MaaS-DHCP
+      sudo: True
+      apt: name=maas-dhcp force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+    - name: Install MaaS-DNS
+      sudo: True
+      apt: name=maas-dns force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+    - name: Create Ansible dir
+      sudo: True
+      file: path={{ ansible_dir }} state=directory mode=0755
+
+    - name: Create Ansible state dir
+      sudo: True
+      file: path={{ ansible_state_dir }} state=directory mode=0755
+
+    - name: Create Initial Maas Region Admin user
+      sudo: True
+      command: /usr/sbin/maas-region-admin createadmin --username={{ maas_username }} --password={{ maas_password }} --email={{ maas_email }} creates={{ maas_startup_state }}
+
+    - name: Create Initial Maas Region Admin user semaphore
+      sudo: True
+      file: path={{ maas_startup_state }} state=touch mode="u=rw,g=r,o=r"
+
