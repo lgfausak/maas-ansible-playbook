@@ -11,6 +11,7 @@
     maas_cluster_mask: 255.255.255.0
     ansible_dir: /var/ansible
     ansible_state_dir: "{{ ansible_dir }}/state"
+    ansible_src_dir: "{{ ansible_dir }}/src"
     maas_startup_state: "{{ ansible_state_dir }}/maas-region-admin"
   tasks:
     - name: set editing mode to vi for this user
@@ -20,13 +21,13 @@
       template: src=templates/inputrc.j2 dest=~/.inputrc
       sudo: True
 
-    - name: set interfaces
-      sudo: True
-      template: src=templates/interfaces.j2 dest=/etc/network/interfaces mode="u=rw,g=r,o=r"
+#    - name: set interfaces
+#      sudo: True
+#      template: src=templates/interfaces.j2 dest=/etc/network/interfaces mode="u=rw,g=r,o=r"
 
-    - name: ifup eth2 network
-      sudo: True
-      command: /sbin/ifup eth2 creates=/run/network/ifup.eth2
+#    - name: ifup eth2 network
+#      sudo: True
+#      command: /sbin/ifup eth2 creates=/run/network/ifup.eth2
 
     - name: Update repository
       sudo: True
@@ -62,5 +63,29 @@
 
     - name: Create Initial Maas Region Admin user semaphore
       sudo: True
-      file: path={{ maas_startup_state }} state=touch mode="u=rw,g=r,o=r"
+      command: creates={{ maas_startup_state }} touch {{ maas_startup_state }}
+
+    - name: Apt get git
+      sudo: True
+      apt: name=git force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+    - name: Get github MaaS VirtualBox Manager
+      sudo: True
+      git: repo=git://github.com/lgfausak/maas-vboxmanage.git dest={{ ansible_src_dir }}/maas-vboxmanage accept_hostkey=True
+
+    - name: Install power_schema.py (overwrite, might be buggy)
+      sudo: True
+      command: creates={{ansible_state_dir }}/power_schema.py cp "{{ ansible_src_dir }}/maas-vboxmanage/power_schema.py" /usr/lib/python2.7/dist-packages/provisioningserver/power_schema.py 
+
+    - name: Mark successful power_schema.py copy
+      sudo: True
+      command: creates={{ansible_state_dir }}/power_schema.py touch {{ansible_state_dir }}/power_schema.py
+
+    - name: Install powertype template
+      sudo: True
+      command: creates={{ansible_state_dir }}/vboxmanage.template cp {{ ansible_src_dir }}/maas-vboxmanage/vboxmanage.template /etc/maas/templates/power/vboxmanage.template
+
+    - name: Mark successful powertype template
+      sudo: True
+      command: creates={{ansible_state_dir }}/vboxmanage.template touch {{ansible_state_dir }}/vboxmanage.template
 
