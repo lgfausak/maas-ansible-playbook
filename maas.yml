@@ -89,3 +89,7 @@
       sudo: True
       command: creates={{ansible_state_dir }}/vboxmanage.template touch {{ansible_state_dir }}/vboxmanage.template
 
+    - name: Pip install maasutil
+      sudo: True
+      pip: name=maasutil
+
