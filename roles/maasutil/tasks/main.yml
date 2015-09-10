@@ -1,0 +1,4 @@
+- name: Pip install maasutil
+  sudo: True
+  pip: name=maasutil
+

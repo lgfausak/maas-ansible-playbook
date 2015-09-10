@@ -1,0 +1,19 @@
+- name: Get github MaaS VirtualBox Manager
+  sudo: True
+  git: repo=git://github.com/lgfausak/maas-vboxmanage.git dest={{ ansible_src_dir }}/maas-vboxmanage accept_hostkey=True
+
+- name: Install power_schema.py (overwrite, might be buggy)
+  sudo: True
+  command: creates={{ansible_state_dir }}/power_schema.py cp "{{ ansible_src_dir }}/maas-vboxmanage/power_schema.py" /usr/lib/python2.7/dist-packages/provisioningserver/power_schema.py 
+
+- name: Mark successful power_schema.py copy
+  sudo: True
+  command: creates={{ansible_state_dir }}/power_schema.py touch {{ansible_state_dir }}/power_schema.py
+
+- name: Install powertype template
+  sudo: True
+  command: creates={{ansible_state_dir }}/vboxmanage.template cp {{ ansible_src_dir }}/maas-vboxmanage/vboxmanage.template /etc/maas/templates/power/vboxmanage.template
+
+- name: Mark successful powertype template
+  sudo: True
+  command: creates={{ansible_state_dir }}/vboxmanage.template touch {{ansible_state_dir }}/vboxmanage.template

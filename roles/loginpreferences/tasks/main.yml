@@ -1,0 +1,4 @@
+#!/usr/bin/env ansible-playbook
+# vim:ft=ansible:
+- name: set editing mode to vi for this user
+  template: src=templates/inputrc.j2 dest=~/.inputrc

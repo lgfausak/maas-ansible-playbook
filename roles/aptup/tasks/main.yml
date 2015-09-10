@@ -1,0 +1,12 @@
+- name: Upgrade installation
+  sudo: True
+  apt: upgrade=dist
+
+- name: Apt get git
+  sudo: True
+  apt: name=git force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+- name: Apt get python-pip
+  sudo: True
+  apt: name=python-pip force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+

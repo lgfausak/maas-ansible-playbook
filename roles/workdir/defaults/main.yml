@@ -1,0 +1,3 @@
+ansible_dir: /var/ansible
+ansible_state_dir: "{{ ansible_dir }}/state"
+ansible_src_dir: "{{ ansible_dir }}/src"

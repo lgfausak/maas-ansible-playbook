@@ -1,0 +1,7 @@
+- name: Create Ansible dir
+  sudo: True
+  file: path={{ ansible_dir }} state=directory mode=0755
+
+- name: Create Ansible state dir
+  sudo: True
+  file: path={{ ansible_state_dir }} state=directory mode=0755
