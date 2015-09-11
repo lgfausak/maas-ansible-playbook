@@ -28,8 +28,8 @@ import requests
 class Inventory:
 
     def __init__(self):
-        self.maas = "http://192.168.1.130/MAAS/api/1.0"
-        self.token = "UKTTYSWuMsuYdRw69V:8bdk94gk8WQ2pfJKJM:Yc4krs68pMjxJXR5PfBeG2AQ7NfRtM7B"
+        self.maas = "http://localhost/MAAS/api/1.0"
+        self.token = "WGXf8ysxd3NCVMFfgB:3PP9MRHNnWQdEWt6cL:GL9feUP53F77tpsK4ECuu3evZxNMbAvN"
         self.args = None
 
         # Parse command line arguments

@@ -1,0 +1,3 @@
+- name: hack on etherwake
+  sudo: True
+  template: src=ether_wake.template.j2 dest=/etc/maas/templates/power/ether_wake.template

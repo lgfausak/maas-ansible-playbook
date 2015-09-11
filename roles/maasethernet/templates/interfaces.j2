@@ -1,0 +1,56 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+{% if maas_network_type is defined %}
+auto {{ maas_network_eth }}
+iface {{ maas_network_eth }} inet {{ maas_network_type }}
+{% if maas_network_type == 'static' %}
+	address {{ maas_network_ip }}
+	netmask {{ maas_network_mask }}
+{% endif %}
+{% if maas_network_dns_nameserver is defined %}
+	dns-nameserver {{ maas_network_dns_nameserver }}
+{% endif %}
+	dns-nameserver 4.2.2.2
+{% if maas_network_dns_search is defined %}
+	dns-search {{ maas_network_dns_search }}
+{% endif %}
+{% endif %}
+
+{% if maas_admin_type is defined %}
+auto {{ maas_admin_eth }}
+iface {{ maas_admin_eth }} inet {{ maas_admin_type }}
+{% if maas_admin_type == 'static' %}
+	address {{ maas_admin_ip }}
+	netmask {{ maas_admin_mask }}
+{% endif %}
+{% if maas_admin_dns_nameserver is defined %}
+	dns-nameserver {{ maas_admin_dns_nameserver }}
+{% endif %}
+{% if maas_admin_dns_search is defined %}
+	dns-search {{ maas_admin_dns_search }}
+{% endif %}
+{% endif %}
+
+{% if maas_cluster_type is defined %}
+auto {{ maas_cluster_eth }}
+iface {{ maas_cluster_eth }} inet {{ maas_cluster_type }}
+{% if maas_cluster_type == 'static' %}
+	address {{ maas_cluster_ip }}
+	netmask {{ maas_cluster_mask }}
+{% endif %}
+{% if maas_cluster_dns_nameserver is defined %}
+	dns-nameserver {{ maas_cluster_dns_nameserver }}
+{% endif %}
+{% if maas_cluster_dns_search is defined %}
+	dns-search {{ maas_cluster_dns_search }}
+{% endif %}
+{% endif %}
+

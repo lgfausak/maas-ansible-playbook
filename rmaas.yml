@@ -6,16 +6,30 @@
     maas_username: maas
     maas_password: 123test
     maas_email: greg@tacodata.com
-    maas_hostonly_ip: 192.168.58.42
+    maas_cluster_type: static
+    maas_cluster_eth: eth0
     maas_cluster_ip: 10.100.200.1
+    maas_cluster_broadcast: 10.100.200.255
     maas_cluster_mask: 255.255.255.0
+
+    maas_network_type: dhcp
+    maas_network_eth: eth1
+    maas_network_dns_nameserver: "{{ ansible_eth1.ipv4.address }}"
+    maas_network_dns_search: maas
+
+#    maas_admin_type: static
+#    maas_admin_ip: 192.168.58.45
+#    maas_admin_mask: 255.255.255.0
   roles:
     - role: loginpreferences
     - role: loginpreferences
       sudo: True
     - role: workdir
     - role: aptup
+    - role: maasethernet
     - role: maasserver
     - role: maasvboxpower
+    - role: maasetherwakehack
+    - role: maaswakeonlan
     - role: maasutil
 

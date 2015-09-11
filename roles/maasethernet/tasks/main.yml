@@ -1,0 +1,7 @@
+- name: set interfaces
+  sudo: True
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode="u=rw,g=r,o=r"
+
+- name: ifup maas_cluster_eth network
+  sudo: True
+  command: /sbin/ifup {{ maas_cluster_eth }} creates=/run/network/ifup.{{ maas_cluster_eth }}

@@ -1,0 +1,7 @@
+- name: Apt get wakeonlan
+  sudo: True
+  apt: name=wakeonlan force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+- name: modify sudoers for maas
+  sudo: True
+  template: src=99-maas-sudoers.j2 dest=/etc/sudoers.d/99-maas-sudoers mode="u=r,g=r" owner="root" group="root"
