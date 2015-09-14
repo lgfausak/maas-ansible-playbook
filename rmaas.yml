@@ -31,5 +31,7 @@
     - role: maasvboxpower
     - role: maasetherwakehack
     - role: maaswakeonlan
+    - role: maasamttool
     - role: maasutil
+    - role: maaspostinstall
 

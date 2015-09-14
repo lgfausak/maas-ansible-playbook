@@ -1,0 +1,11 @@
+# need to login as the maas user
+# and do the command
+# maas my-maas-session boot-resources import
+
+- name: Download MaaS Initial Images
+  sudo: True
+  command: creates={{ansible_state_dir }}/maas_initial_images echo done with maas initial images
+
+- name: Mark successful Download MaaS Initial Images
+  sudo: True
+  command: creates={{ansible_state_dir }}/maas_initial_images touch {{ansible_state_dir }}/maas_initial_images

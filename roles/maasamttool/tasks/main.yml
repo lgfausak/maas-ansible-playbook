@@ -1,0 +1,7 @@
+- name: Apt get amtterm
+  sudo: True
+  apt: name=amtterm force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
+
+- name: Apt get wsmancli
+  sudo: True
+  apt: name=wsmancli force=yes update_cache=yes cache_valid_time=3600 state=installed install_recommends=yes
