@@ -1,6 +1,6 @@
 - name: Update repository
   sudo: True
-  apt_repository: repo='ppa:maas-maintainers/stable'
+  apt_repository: repo='ppa:maas/stable'
 
 - name: Upgrade installation
   sudo: True
